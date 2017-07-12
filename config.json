@@ -1,0 +1,6 @@
+{
+	"discordChannelID": "DISCORD CHANNEL",
+	"discordToken": "DISCORD BOT TOKEN",
+	"botPrefix": "h!",
+	"adminID": "DISCORD ADMIN ID"
+}

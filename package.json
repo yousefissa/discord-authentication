@@ -1,0 +1,17 @@
+{
+  "name": "auth-bot",
+  "version": "1.0.0",
+  "description": "Discord authenticator bot. Check readme.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yousef Issa",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "bcrypt-nodejs": "0.0.3",
+    "discord.js": "^11.1.0",
+    "mongoose": "^4.11.1"
+  }
+}
