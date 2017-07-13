@@ -49,6 +49,11 @@ discordClient.on('message', message => {
 
     // splits at spaces
     const messageArray = message.content.split(' ');
+    // lets check if they're asking for help! Put your URL!
+    if (messageArray[1].toLowerCase() == 'help') {
+        message.reply('Log onto URL to get your ID, then activate your account by using `h! activate <your-hoc-key>`!');
+        return;
+    }
     // sure the user entered more than just the prefix. I have 3 arguments
     if (messageArray.length != 3) {
         message.reply('Invalid argument count!');
