@@ -14,7 +14,7 @@ const discordClient = new Discord.Client();
 // mongo setup
 const mongoose = require('mongoose');
 // set the conection, change your url!
-var mongoDB = 'mongodb://127.0.01/expressauth';
+var mongoDB = 'mongodb URL';
 mongoose.connect(mongoDB);
 // get connection
 var datab = mongoose.connection;
