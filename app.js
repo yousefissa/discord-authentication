@@ -51,7 +51,7 @@ discordClient.on('message', message => {
     const messageArray = message.content.split(' ');
     // lets check if they're asking for help! Put your URL!
     if (messageArray[1].toLowerCase() == 'help') {
-        message.reply('Log onto URL to get your ID, then activate your account by using `h! activate <your-hoc-key>`!');
+        message.reply('Log onto URL to get your ID, then activate your account by using `h! activate <your-key>`!');
         return;
     }
     // sure the user entered more than just the prefix. I have 3 arguments
@@ -69,7 +69,7 @@ discordClient.on('message', message => {
     if (webUserID.length < 33 || webUserID.length > 39) {
         message.reply('That key isn\'t the right length. Try again!');
         return;
-    }
+    };
 
     // looks for a specific word, in our case, activate
     if (messageArray[1].toLowerCase() == 'activate') {
