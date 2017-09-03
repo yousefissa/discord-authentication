@@ -1,8 +1,7 @@
 # Discord-Auth Bot
 
-One of my first Node projects! this is a bot that communicates with a mongodb to change a boolean 
+One of my first Node projects! This is a bot that communicates with a mongodb to change a boolean. This bot also allows users to role themselves. In my server I used this to allow users to role themselves as afk so they would not get kicked for inactivity.
 
-A bot that reads a MongoDB and changes a value upon a user message.
 
 ### Prerequisites 
 
@@ -11,7 +10,7 @@ Must have a set up MongoDB, and a discord bot in your server! The comments expla
 
 ### Installing
 
-Simply run `npm install` to install the required dependencies. The comments make this script super easy to set up and use. Simply change the config file and other fields highlighted in app.js
+Simply run `npm install` to install the required dependencies. The comments make this script super easy to set up and use. Simply change the config file and other fields highlighted and commented in app.js.
 
 
 ### Deployment
