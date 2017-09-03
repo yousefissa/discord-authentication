@@ -1,9 +1,9 @@
 // get the config file and assign vars
 const authConfig = require('./config.json')
-var channelID = authConfig.discordChannelID;
-var discordToken = authConfig.discordToken;
-var botPrefix = authConfig.botPrefix;
-var discordAdminID = authConfig.adminID;
+const channelID = authConfig.discordChannelID;
+const discordToken = authConfig.discordToken;
+const botPrefix = authConfig.botPrefix;
+const discordAdminID = authConfig.adminID;
 
 
 // discord setup
@@ -14,7 +14,7 @@ const discordClient = new Discord.Client();
 // mongo setup
 const mongoose = require('mongoose');
 // set the conection, change your url!
-var mongoDB = 'mongodb URL';
+const mongoDB = 'mongodb URL';
 mongoose.connect(mongoDB);
 // get connection
 var datab = mongoose.connection;
@@ -23,7 +23,7 @@ datab.on('error', console.error.bind(console, 'MongoDB connection error!'));
 
 
 // get schema
-var User = require('./model');
+const User = require('./model');
 datab.on('open', function(ref) {
     console.log('Connected to the mongo server. ');
     // login once database is ready
@@ -35,6 +35,8 @@ discordClient.on('ready', () => {
     console.log('Auth bot is now live!');
     // sets and sends to the channel that we will use
     authChannel = discordClient.channels.get(channelID);
+    // get the role object
+    afkRole = discordClient.guilds.get('ROLE ID').roles.find('name', 'AFK');
     authChannel.send('Authentication bot is now live!');
 });
 
@@ -46,19 +48,53 @@ discordClient.on('message', message => {
     if (message.author.bot) return;
     // check if message starts with prefix
     if (!message.content.startsWith(botPrefix)) return;
+    // looks for new lines. they break our bot.
+    if (message.content.indexOf("\n") !== -1) {
+        message.reply('Please keep your message on one line!');
+        return;
+    }
 
     // splits at spaces
     const messageArray = message.content.split(' ');
-    // lets check if they're asking for help! Put your URL!
-    if (messageArray[1].toLowerCase() == 'help') {
-        message.reply('Log onto URL to get your ID, then activate your account by using `h! activate <your-key>`!');
-        return;
-    }
-    // sure the user entered more than just the prefix. I have 3 arguments
-    if (messageArray.length != 3) {
+    // check if all arguments are present
+    if (messageArray.length < 2 || messageArray[1].length > 9) {
         message.reply('Invalid argument count!');
         return;
     }
+    // lets check if they're asking for help!
+    // NOTE: Change to your domain.
+    if (messageArray[1].toLowerCase() == 'help') {
+        message.reply('Log onto http://houseofcarts.io to get your HOC-ID, then activate your account by using `h! activate <your-hoc-key>`! Check pinned for more info and commands.');
+        return;
+    }
+    try {
+        // check if they are trying to assign themselves as afk
+        if (messageArray[1].toLowerCase() == 'afk') {
+            try {
+                message.guild.members.get(message.author.id).addRole(afkRole);
+                message.reply('You\'ve been added to the AFK role. Enjoy your break! :heart:');
+                return;
+            } catch (err) {
+                message.reply(`I ran into a problem! :cry: Contact <@${discordAdminID}>.`);
+                return;
+            }
+        }
+        // check if user wants to get off the afk role
+        if (messageArray[1].toLowerCase() == 'back') {
+            message.guild.members.get(message.author.id).removeRole(afkRole);
+            message.reply('You\'ve been removed from the AFK role. Welcome back. :fire:');
+            return;
+        }
+    } catch (err) {
+        message.reply(`I ran into a problem! :cry: Contact <@${discordAdminID}>.`);
+        return;
+    };
+    // check if the user included an extra space
+    if (messageArray.indexOf('') >= 0) {
+        message.reply('Watch your spacing! You seem to have added an extra space.');
+        return;
+    };
+
     // lets store some variables for later
     const discordUserID = message.author.id;
     // user-id from our website
@@ -74,6 +110,7 @@ discordClient.on('message', message => {
     // looks for a specific word, in our case, activate
     if (messageArray[1].toLowerCase() == 'activate') {
         // finds a user with the id that we set earlier
+        // NOTE: Change your DB key
         User.findOne({ 'local.webID': webUserID }, function(err, user) {
             if (err) {
                 message.reply('I ran into an error. :(');
